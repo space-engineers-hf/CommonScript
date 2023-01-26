@@ -80,7 +80,7 @@ namespace IngameScript
 
                 if (match != null)
                 {
-                    result = match.Groups["content"].Value;
+                    result = match.Groups["content"].Value.Trim();
                 }
                 return result;
             }
