@@ -13,5 +13,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)DisplayHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)InventoryHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MyTextSurfaceInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommonHelper.cs" />
   </ItemGroup>
 </Project>

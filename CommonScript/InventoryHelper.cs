@@ -24,7 +24,10 @@ namespace IngameScript
     public static class InventoryHelper
     {
 
-        public static IMyInventory[] GetInventories(this IMyTerminalBlock block)
+        /// <summary>
+        /// Search for all inventories of the entity.
+        /// </summary>
+        public static IList<IMyInventory> GetInventories(this IMyTerminalBlock block)
         {
             var blockInventories = new List<IMyInventory>();
 
@@ -35,7 +38,51 @@ namespace IngameScript
                     blockInventories.Add(block.GetInventory(i));
                 }
             }
-            return blockInventories.ToArray();
+            return blockInventories;
+        }
+
+        /// <summary>
+        /// Returns all items this inventory accepts.
+        /// </summary>
+        public static IList<MyItemType> GetAcceptedItems(this IMyInventory inventory, Func<MyItemType, bool> filter = null)
+        {
+            var types = new List<MyItemType>();
+
+            inventory.GetAcceptedItems(types, filter);
+            return types;
+        }
+
+        /// <summary>
+        /// Returns all items present inside this inventory and returns snapshot of the current inventory state.
+        /// </summary>
+        public static IList<MyInventoryItem> GetItems(this IMyInventory inventory, Func<MyInventoryItem, bool> filter = null)
+        {
+            var items = new List<MyInventoryItem>();
+
+            inventory.GetItems(items, filter);
+            return items;
+        }
+
+        /// <summary>
+        /// Returns all items present inside this inventory and returns snapshot of the current inventory state.
+        /// </summary>
+        public static IList<MyInventoryItem> GetItems(this IMyTerminalBlock block, Func<IMyInventory, bool> collect = null, Func<MyInventoryItem, bool> filter = null)
+        {
+            var items = new List<MyInventoryItem>();
+
+            if (block.HasInventory)
+            {
+                for (int i = 0; i < block.InventoryCount; i++)
+                {
+                    var inventory = block.GetInventory(i);
+
+                    if (collect == null || collect(inventory))
+                    {
+                        inventory.GetItems(items, filter);
+                    }
+                }
+            }
+            return items;
         }
 
     }

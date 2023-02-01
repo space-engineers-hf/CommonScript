@@ -23,7 +23,7 @@ namespace IngameScript
     static class CommonExtensions
     {
 
-        public static IEnumerable<IMyTerminalBlock> GetBlocks(this IMyBlockGroup blockGroup)
+        public static IList<IMyTerminalBlock> GetBlocks(this IMyBlockGroup blockGroup)
         {
             var blocks = new List<IMyTerminalBlock>();
 
@@ -31,7 +31,7 @@ namespace IngameScript
             return blocks;
         }
 
-        public static IEnumerable<T> GetBlocksOfType<T>(this IMyBlockGroup blockGroup, Func<T, bool> collect = null) where T : class
+        public static IList<T> GetBlocksOfType<T>(this IMyBlockGroup blockGroup, Func<T, bool> collect = null) where T : class
         {
             var blocks = new List<T>();
 
@@ -39,7 +39,7 @@ namespace IngameScript
             return blocks;
         }
 
-        public static IEnumerable<IMyTerminalBlock> GetBlocks(this IMyGridTerminalSystem gridTerminalSystem)
+        public static IList<IMyTerminalBlock> GetBlocks(this IMyGridTerminalSystem gridTerminalSystem)
         {
             var blocks = new List<IMyTerminalBlock>();
 
@@ -47,7 +47,7 @@ namespace IngameScript
             return blocks;
         }
 
-        public static IEnumerable<T> GetBlocksOfType<T>(this IMyGridTerminalSystem gridTerminalSystem, Func<T, bool> collect = null) where T : class
+        public static IList<T> GetBlocksOfType<T>(this IMyGridTerminalSystem gridTerminalSystem, Func<T, bool> collect = null) where T : class
         {
             var blocks = new List<T>();
 
@@ -55,12 +55,23 @@ namespace IngameScript
             return blocks;
         }
 
-        public static IEnumerable<IMyBlockGroup> GetBlockGroups(this IMyGridTerminalSystem gridTerminalSystem, Func<IMyBlockGroup, bool> collect = null)
+        public static IList<IMyBlockGroup> GetBlockGroups(this IMyGridTerminalSystem gridTerminalSystem, Func<IMyBlockGroup, bool> collect = null)
         {
             var blockGroups = new List<IMyBlockGroup>();
 
             gridTerminalSystem.GetBlockGroups(blockGroups, collect);
             return blockGroups;
+        }
+
+        /// <summary>
+        /// Get all terminal actions available for block.
+        /// </summary>
+        public static IList<ITerminalAction> GetActions(this IMyTerminalBlock block, Func<ITerminalAction, bool> collect = null)
+        {
+            var actions = new List<ITerminalAction>();
+
+            block.GetActions(actions, collect);
+            return actions;
         }
 
     }
