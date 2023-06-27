@@ -130,5 +130,17 @@ namespace IngameScript
             return actions;
         }
 
+        /// <summary>
+        /// Performs the specified action on each element of the <see cref="IEnumerable{T}"/>
+        /// </summary>
+        /// <param name="action">The action delegate to perform on each element of the <see cref="IEnunumerable{T}"/>.</param>
+        public static void ForEach<T>(this IEnumerable<T> collections, Action<T> action) where T : class
+        {
+            foreach (var item in collections)
+            {
+                action(item);
+            }
+        }
+
     }
 }
