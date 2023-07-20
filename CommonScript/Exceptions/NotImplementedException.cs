@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IngameScript
 {
-    public sealed class NotImplementedException: Exception
+    public sealed class NotImplementedException : Exception
     {
 
     }
