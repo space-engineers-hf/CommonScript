@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CommonExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DisplayHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\StackOverflowException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ColorHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)InventoryHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MyTextSurfaceInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommonHelper.cs" />
