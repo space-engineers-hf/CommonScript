@@ -20,8 +20,7 @@ using VRageMath;
 
 namespace IngameScript
 {
-    partial class Program
-    {
+    
         public static class DisplayHelper
         {
 
@@ -65,6 +64,15 @@ namespace IngameScript
                 }
                 return result;
             }
+
+            /// <summary>
+            /// Gets all LCD panels and terminal screens in the group.
+            /// </summary>
+            /// <remarks>
+            /// Includes <see cref="IMyTextPanel"/> and <see cref="IMyTextSurfaceProvider"/> items.
+            /// </remarks>
+            public static IList<MyTextSurfaceInfo> GetTextSurfaces(params IMyTerminalBlock[] blocks)
+                => GetTextSurfaces((IEnumerable<IMyTerminalBlock>)blocks);
 
             /// <summary>
             /// Returns the custom data part of the specified index.
@@ -133,6 +141,5 @@ namespace IngameScript
                 return string.Join(" ", text);
             }
 
-        }
     }
 }

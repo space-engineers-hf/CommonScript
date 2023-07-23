@@ -20,8 +20,6 @@ using VRageMath;
 
 namespace IngameScript
 {
-    partial class Program
-    {
 
         /// <summary>
         /// Information for LCDs and other text surfaces.
@@ -54,5 +52,4 @@ namespace IngameScript
 
         }
 
-    }
 }
