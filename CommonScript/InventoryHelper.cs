@@ -109,6 +109,7 @@ namespace IngameScript
         /// <summary>
         /// Finds the specified item in a list of <see cref="IMyTerminalBlock"/>.
         /// </summary>
+        /// <param name="itemType"></param>
         /// <param name="amount">Maximun quantity to search. Then the amount is found, it stops to search. Null for searching all.</param>
         /// <param name="targetInventory">Inventory to check if the item found can moves to it. Null for not checking.</param>
         /// <returns></returns>
@@ -120,23 +121,39 @@ namespace IngameScript
 
             while (etor.MoveNext() && sum < amount)
             {
-                var block = etor.Current;
+                list.AddRange(FindItem(etor.Current, itemType, amount, targetInventory, ref sum));
+            }
+            return list;
+        }
 
-                if (block.HasInventory)
+        /// <summary>
+        /// Find the specified item in a <see cref="IMyTerminalBlock"/>.
+        /// </summary>
+        /// <param name="itemType"></param>
+        /// <param name="amount">Maximun quantity to search. Then the amount is found, it stops to search. Null for searching all.</param>
+        /// <param name="targetInventory">Inventory to check if the item found can moves to it. Null for not checking.</param>
+        /// <returns></returns>
+        public static IEnumerable<MyInventoryItemResult> FindItem(this IMyTerminalBlock block, MyItemType itemType, MyFixedPoint? amount = null, IMyInventory targetInventory = null, ref MyFixedPoint sum = null)
+        {
+            var list = new List<MyInventoryItemResult>();
+
+            if (block.HasInventory)
+            {
+                var inventory = block.TryGetInventory(itemType);
+
+                if (inventory != null && (targetInventory == null || inventory.CanTransferItemTo(targetInventory, itemType)))
                 {
-                    var inventory = block.TryGetInventory(itemType);
+                    var itemNullable = inventory.FindItem(itemType);
 
-                    if (inventory != null && (targetInventory == null || inventory.CanTransferItemTo(targetInventory, itemType)))
+                    if (itemNullable != null)
                     {
-                        var itemNullable = inventory.FindItem(itemType);
+                        var item = (MyInventoryItem)itemNullable;
 
-                        if (itemNullable != null)
+                        if (sum != null)
                         {
-                            var item = (MyInventoryItem)itemNullable;
-
                             sum += item.Amount;
-                            list.Add(new MyInventoryItemResult(inventory, item));
                         }
+                        list.Add(new MyInventoryItemResult(inventory, item));
                     }
                 }
             }
