@@ -142,5 +142,27 @@ namespace IngameScript
             }
         }
 
+        /// <summary>
+        /// Creates a dictionary from an <see cref="IEnumerable{T}"/> safely using the specified key and element selectors and comparer.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of source.</typeparam>
+        /// <typeparam name="TKey">The type of the keys returned by keySelector.</typeparam>
+        /// <typeparam name="TElement">The type of the values returned by elementSelector.</typeparam>
+        /// <param name="source">The source <see cref="IEnumerable{T}"/> to create the dictionary from.</param>
+        /// <param name="keySelector">A function to extract a key from each element.</param>
+        /// <param name="elementSelector">A function to map each element to a value.</param>
+        /// <param name="comparer">An equality comparer to compare keys.</param>
+        /// <returns>A dictionary containing keys and values selected from the source.</returns>
+        public static Dictionary<TKey, TElement> ToDictionarySafe<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+        {
+            var result = new Dictionary<TKey, TElement>(comparer);
+
+            foreach (var item in source)
+            {
+                result.Add(keySelector(item), elementSelector(item));
+            }
+            return result;
+        }
+
     }
 }
