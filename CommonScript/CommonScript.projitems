@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\NotImplementedException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\StackOverflowException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)InventoryHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MyInventoryItemResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MyTextSurfaceInfo.cs" />
   </ItemGroup>
 </Project>

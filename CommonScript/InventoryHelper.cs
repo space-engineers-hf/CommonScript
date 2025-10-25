@@ -42,6 +42,27 @@ namespace IngameScript
         }
 
         /// <summary>
+        /// Returns an inventory that can store an specific <see cref="MyItemType"/>
+        /// </summary>
+        public static IMyInventory TryGetInventory(this IMyTerminalBlock block, MyItemType itemType)
+        {
+            IMyInventory result = null;
+            var acceptedItems = new List<MyItemType>();
+
+            for (int i = 0; i < block.InventoryCount && result == null; i++)
+            {
+                var inventory = block.GetInventory(i);
+
+                inventory.GetAcceptedItems(acceptedItems);
+                if (acceptedItems.Contains(itemType))
+                {
+                    result = inventory;
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
         /// Returns all items this inventory accepts.
         /// </summary>
         public static IList<MyItemType> GetAcceptedItems(this IMyInventory inventory, Func<MyItemType, bool> filter = null)
@@ -64,7 +85,7 @@ namespace IngameScript
         }
 
         /// <summary>
-        /// Returns all items present inside this inventory and returns snapshot of the current inventory state.
+        /// Returns all items present inside this inventory and returns a snapshot of the current inventory state.
         /// </summary>
         public static IList<MyInventoryItem> GetItems(this IMyTerminalBlock block, Func<IMyInventory, bool> collect = null, Func<MyInventoryItem, bool> filter = null)
         {
@@ -83,6 +104,43 @@ namespace IngameScript
                 }
             }
             return items;
+        }
+
+        /// <summary>
+        /// Finds the specified item in a list of <see cref="IMyTerminalBlock"/>.
+        /// </summary>
+        /// <param name="amount">Maximun quantity to search. Then the amount is found, it stops to search. Null for searching all.</param>
+        /// <param name="targetInventory">Inventory to check if the item found can moves to it. Null for not checking.</param>
+        /// <returns></returns>
+        public static IEnumerable<MyInventoryItemResult> FindItem(this IEnumerable<IMyTerminalBlock> blocks, MyItemType itemType, MyFixedPoint? amount = null, IMyInventory targetInventory = null)
+        {
+            var list = new List<MyInventoryItemResult>();
+            MyFixedPoint sum = 0;
+            var etor = blocks.GetEnumerator();
+
+            while (etor.MoveNext() && sum < amount)
+            {
+                var block = etor.Current;
+
+                if (block.HasInventory)
+                {
+                    var inventory = block.TryGetInventory(itemType);
+
+                    if (inventory != null && (targetInventory == null || inventory.CanTransferItemTo(targetInventory, itemType)))
+                    {
+                        var itemNullable = inventory.FindItem(itemType);
+
+                        if (itemNullable != null)
+                        {
+                            var item = (MyInventoryItem)itemNullable;
+
+                            sum += item.Amount;
+                            list.Add(new MyInventoryItemResult(inventory, item));
+                        }
+                    }
+                }
+            }
+            return list;
         }
 
     }
