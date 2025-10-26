@@ -121,7 +121,7 @@ namespace IngameScript
 
             while (etor.MoveNext() && sum < amount)
             {
-                list.AddRange(FindItem(etor.Current, itemType, amount, targetInventory, ref sum));
+                list.AddRange(FindItem(etor.Current, itemType, ref sum, amount, targetInventory));
             }
             return list;
         }
@@ -133,7 +133,20 @@ namespace IngameScript
         /// <param name="amount">Maximun quantity to search. Then the amount is found, it stops to search. Null for searching all.</param>
         /// <param name="targetInventory">Inventory to check if the item found can moves to it. Null for not checking.</param>
         /// <returns></returns>
-        public static IEnumerable<MyInventoryItemResult> FindItem(this IMyTerminalBlock block, MyItemType itemType, MyFixedPoint? amount = null, IMyInventory targetInventory = null, ref MyFixedPoint sum = null)
+        public static IEnumerable<MyInventoryItemResult> FindItem(this IMyTerminalBlock block, MyItemType itemType, MyFixedPoint? amount = null, IMyInventory targetInventory = null)
+        {
+            MyFixedPoint sum = 0;
+            return FindItem(block, itemType, ref sum, amount, targetInventory);
+        }
+
+        /// <summary>
+        /// Find the specified item in a <see cref="IMyTerminalBlock"/>.
+        /// </summary>
+        /// <param name="itemType"></param>
+        /// <param name="amount">Maximun quantity to search. Then the amount is found, it stops to search. Null for searching all.</param>
+        /// <param name="targetInventory">Inventory to check if the item found can moves to it. Null for not checking.</param>
+        /// <returns></returns>
+        public static IEnumerable<MyInventoryItemResult> FindItem(this IMyTerminalBlock block, MyItemType itemType, ref MyFixedPoint sum, MyFixedPoint? amount = null, IMyInventory targetInventory = null)
         {
             var list = new List<MyInventoryItemResult>();
 
@@ -149,10 +162,7 @@ namespace IngameScript
                     {
                         var item = (MyInventoryItem)itemNullable;
 
-                        if (sum != null)
-                        {
-                            sum += item.Amount;
-                        }
+                        sum += item.Amount;
                         list.Add(new MyInventoryItemResult(inventory, item));
                     }
                 }
